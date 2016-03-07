@@ -15,7 +15,7 @@ These commands will install the modules only in your project.
 To set up your keys file, you must
 1. Change the name to the `serverKeys.json.changeme` file. Rename it to `serverKeys.json`.
 2. Change the messages who appears instead of the keys, writing your own keys.  
->:warning:Remember to add this file to your `.gitignore` to keep your keys secret.
+>:warning:Remember to add this file to your `.gitignore` file to keep your keys secret.
 
 ## Launching the server
 Run the server from your project folder using:  
