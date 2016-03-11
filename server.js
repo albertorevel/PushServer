@@ -5,16 +5,21 @@ var app = express();
 var authKey = "";
 var clientToken = "";
 
-app.get('/', function (req, res) {
-   var reqHost = req.hostname;
-   console.log("New request from %s", reqHost);
+app.get('/notify/:id', function (req, res) {
+   var reqId = req.params.id;
+   console.log("New request to id: %s", reqId);
       
    requestify.request('https://gcm-http.googleapis.com/gcm/send', {
     method: 'POST',
     body: {
-        'data': {
-			'score': '5x1',
-			'time': '16:10'
+        'id': '0ababa34',
+		'nombre': 'Alarma 1',
+		'descripcion': 'Esta alarma ha sido lanzada',
+		'imagen': 'null',
+		'origen': 'tirador baño',
+		'relativo': 'Miquel Roig',
+		'zona': 'Hab. 102',
+		'estado': '0'
 		},
 		'to': clientToken
         
@@ -33,8 +38,9 @@ app.get('/', function (req, res) {
    
 })
 
-app.post('/signup',function(req, res) {
-	res.send('Not ready');
+app.post('/register',function(req, res) {
+	var reqId = req.body.id;
+	res.sendStatus(404);
 })
 
 
