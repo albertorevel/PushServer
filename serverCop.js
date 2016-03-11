@@ -27,7 +27,7 @@ app.get('/notify/:id', function (req, res) {
     headers: {
         'Content-Type': 'application/json',
 		'Authorization': 'key='+authKey
-    })
+    }
   
 }).then(function(response) {
 	if(response.getCode() == 200) {
