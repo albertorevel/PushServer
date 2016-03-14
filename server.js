@@ -12,8 +12,6 @@ var keys;
 app.get('/notify/:id', function (req, res) {
    var reqId = req.params.id;
    console.log("New request to id: %s", reqId);
-   console.log(authKey);
-   console.log(clientToken);
       
   /* requestify.request('http://gcm-http.googleapis.com/gcm/send', {
     method: 'POST',
@@ -75,7 +73,6 @@ app.post('/register',function(req, res) {
 	var reqToken = req.body.token;
 	console.log("requestID: %s", reqId);
 	console.log("request token: %s", reqToken);
-	res.sendStatus(404);
 })
 
 
