@@ -1,22 +1,24 @@
+// modules
 var express = require('express');
 var jsonfile = require('jsonfile');
 var util = require('util');
 var requestify = require('requestify');
 var bodyParser = require('body-parser')
 var requests = require('request');
+//variables
 var app = express();
 var jsonParser = bodyParser.json();
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
-
+var serverFile = './serverKeys.json';
+var clientsFile = './clientsKeys.json';
+var serverKeys;
+var clientsKeys;
 var authKey = "";
-var clientToken = "";
-var file = './serverKeys.json';
-var keys;
 
 app.get('/notify/:id', function (req, res) {
    var reqId = req.params.id;
    console.log("New request to id: %s", reqId);
-     clientToken = keys.clients[reqId];
+     var clientToken = clientsKeys[reqId].token;
 	 
 	 console.log(clientToken);
 	 
@@ -84,15 +86,24 @@ app.get('/notify/:id', function (req, res) {
 app.post('/register',jsonParser,function(req, res) {
 	/* var reqId = req.body.id;
 	console.log("requestID: %s", reqId); */
+	
+	console.log("New request");
 	var reqToken = req.body.token;
-	console.log("request token: %s", reqToken);
-	console.log(keys.clients);
-	var lastKey = Object.keys(keys.clients).sort().reverse()[0];
+	var reqUsername = req.body.username;
+	var reqPassword = req.body.password;
+	
+	var lastKey = Object.keys(clientsKeys).sort().reverse()[0];
+	
+	
 	var newKey = parseInt(lastKey) + 1;
 	
-	keys.clients[newKey] = reqToken;
+	clientsKeys[newKey] = {'token': reqToken,
+		'username': reqUsername,
+	'password': reqPassword};
+
+	jsonfile.writeFileSync(clientsFile,clientsKeys); 
 	
-	jsonfile.writeFileSync(file,keys);
+	res.sendStatus(200);
 })
 
 
@@ -107,10 +118,9 @@ var server = app.listen(8081, function () {
   
   
 
-  keys = jsonfile.readFileSync(file);
+  serverKeys = jsonfile.readFileSync(serverFile);
+  authKey = serverKeys.authKey;
   
-  authKey = keys.authKey;
-  
-  
+  clientsKeys = jsonfile.readFileSync(clientsFile);
 	
 })

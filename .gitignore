@@ -34,3 +34,4 @@ node_modules
 
 # Own keys
 serverKeys.json
+clientsKeys.json
