@@ -18,9 +18,9 @@ var authKey = "";
 app.get('/notify/:id', function (req, res) {
    var reqId = req.params.id;
    console.log("New request to id: %s", reqId);
-     var clientToken = clientsKeys[reqId].token;
-	 
-	 console.log(clientToken);
+   
+    var clientToken = clientsKeys[reqId].token;
+	
 	 
  /*  requestify.request('http://gcm-http.googleapis.com/gcm/send', {
     method: 'POST',
@@ -87,7 +87,7 @@ app.post('/register',jsonParser,function(req, res) {
 	/* var reqId = req.body.id;
 	console.log("requestID: %s", reqId); */
 	
-	console.log("New request");
+	console.log("New register request");
 	var reqToken = req.body.token;
 	var reqUsername = req.body.username;
 	var reqPassword = req.body.password;
@@ -97,11 +97,23 @@ app.post('/register',jsonParser,function(req, res) {
 	
 	var newKey = parseInt(lastKey) + 1;
 	
-	clientsKeys[newKey] = {'token': reqToken,
-		'username': reqUsername,
-	'password': reqPassword};
+	var key = 0;
+	for(var present = false; key <= lastKey; key ++) {
+		if(clientsKeys[key].token == reqToken) {
+			present = true;
+			break;
+		}
+	}
 
-	jsonfile.writeFileSync(clientsFile,clientsKeys); 
+	console.log(""+present);
+	
+	if(!present) {
+		clientsKeys[newKey] = {'token': reqToken,
+			'username': reqUsername,
+			'password': reqPassword};
+
+		jsonfile.writeFileSync(clientsFile,clientsKeys); 
+	} 
 	
 	res.sendStatus(200);
 })
@@ -109,7 +121,7 @@ app.post('/register',jsonParser,function(req, res) {
 
 
 
-var server = app.listen(8081, function () {
+var server = app.listen(8080, function () {
 
   var host = server.address().address
   var port = server.address().port
